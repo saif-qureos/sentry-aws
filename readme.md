@@ -1,11 +1,4 @@
-# Story
-
-Tasks take about 2 hours (including build waiting time), if the set of tools are clear. Since the set of tools were not clear I had to read the installer file from sentry. Based on the structure of sentry the best method of deployment is a mixture of **Packer** and **Terraform** .
-
-This weekend was my cultural new year called Nowruz and the year of 1400 has been started :), so I was celebrating the new year. Else you would have this earlier.
-
 *hint:* *I skipped using terraform-docs to generate the readme.md.* 
-
 *Hint2: I used AWS US-EAST-1 as my default region.*
 
 # Prerequisites
