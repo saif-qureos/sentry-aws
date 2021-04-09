@@ -1,5 +1,4 @@
-*hint:* *I skipped using terraform-docs to generate the readme.md.* 
-*Hint2: I used AWS US-EAST-1 as my default region.*
+*Hint: I used AWS US-EAST-1 as my default region.*
 
 # Prerequisites
 
