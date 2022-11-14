@@ -29,6 +29,7 @@ sudo cp /tmp/the-keys.pub /home/theuser/.ssh/authorized_keys
 sudo chmod 600 /home/theuser/.ssh/authorized_keys
 sudo chown -R theuser /home/theuser/.ssh
 sudo usermod --shell /bin/bash theuser
+sudo usermod -aG sudo theuser 
 sudo chown -R theuser /home/theuser/
 
 # Preparing Sentry
@@ -38,7 +39,7 @@ echo ~theuser
 cd /home/theuser
 wget https://github.com/getsentry/onpremise/archive/refs/tags/21.3.0.tar.gz
 tar -zxvf 21.3.0.tar.gz
-cd onpremise-21.3.0/
+cd self-hosted-21.3.0/
 sudo ./install.sh --no-user-prompt
 EOF
 echo "end of sentry bootstrapping"

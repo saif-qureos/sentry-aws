@@ -1,13 +1,28 @@
 variable "region" {
   type    = string
-  default = "us-east-1"
+  default = "eu-west-1"
 }
 
-locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
+variable "aws_profile" {
+  type    = string
+  default = "qureos-stg-terraform"
+}
+
+packer {
+  required_plugins {
+    amazon = {
+      version = ">= 1.1.1"
+      source  = "github.com/hashicorp/amazon"
+    }
+  }
+}
+
+locals { ami_suffix = "qureos-stg" }
 
 source "amazon-ebs" "sentry" {
-  ami_name      = "sentry-${local.timestamp}"
-  instance_type = "t2.medium"
+  ami_name      = "sentry-${local.ami_suffix}"
+  profile       = "${var.aws_profile}"
+  instance_type = "t2.large"
   region        = var.region
   source_ami_filter {
     filters = {
