@@ -126,11 +126,3 @@ variable "db_user" {
 variable "db_password" {
   description = "(Required) Database Password"
 }
-
-variable "aws_profile" {
-  description = "(Required) AWS Profile to use."
-}
-
-variable "aws_s3_backend_bucket_name" {
-  description = "(Required) AWS S3 Backend Bucket Name to use."
-}
