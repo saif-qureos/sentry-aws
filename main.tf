@@ -270,7 +270,7 @@ resource "aws_autoscaling_group" "sentry_asg" {
   min_size             = var.asg_min_size
   desired_capacity     = var.asg_desired_capacity
   max_size             = var.asg_max_size
-  vpc_zone_identifier  = var.subnet_ids
+  vpc_zone_identifier  = var.is_private ? var.private_subnet_ids : var.public_subnet_ids
   health_check_type    = "EC2"
   termination_policies = ["OldestLaunchConfiguration", "OldestInstance"]
   target_group_arns    = "${aws_alb_target_group.tg_sentry.arn}"
