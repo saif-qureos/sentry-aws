@@ -236,7 +236,7 @@ resource "aws_alb_listener" "ssl_sentry_443" {
 }
 
 resource "aws_lb_listener_rule" "host_based_weighted_routing" {
-  listener_arn = aws_alb.alb_sentry.arn
+  listener_arn = aws_alb_listener.ssl_sentry_443.arn
 
   action {
     type             = "forward"
