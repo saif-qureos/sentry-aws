@@ -1,3 +1,4 @@
+#cloud-boothook
 #!/bin/bash
 sudo -H -i -u theuser -- env bash <<EOF
 whoami
