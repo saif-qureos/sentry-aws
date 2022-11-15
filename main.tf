@@ -225,8 +225,28 @@ resource "aws_alb_listener" "ssl_sentry_443" {
   certificate_arn   = var.certificate_arn
    
   default_action {
-    target_group_arn = aws_alb_target_group.tg_sentry.arn
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Nothing Here!"
+      status_code  = "400"
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "host_based_weighted_routing" {
+  listener_arn = aws_alb.alb_sentry.arn
+
+  action {
     type             = "forward"
+    target_group_arn = aws_alb_target_group.tg_sentry.arn
+  }
+
+  condition {
+    host_header {
+      values = [var.domain]
+    }
   }
 }
 
