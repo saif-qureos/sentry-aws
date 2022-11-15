@@ -273,7 +273,7 @@ resource "aws_autoscaling_group" "sentry_asg" {
   vpc_zone_identifier  = var.is_private ? var.private_subnet_ids : var.public_subnet_ids
   health_check_type    = "EC2"
   termination_policies = ["OldestLaunchConfiguration", "OldestInstance"]
-  target_group_arns    = "${aws_alb_target_group.tg_sentry.arn}"
+  target_group_arns    = ["${aws_alb_target_group.tg_sentry.arn}"]
 
   lifecycle {
     create_before_destroy = true
