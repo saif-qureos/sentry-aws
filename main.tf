@@ -279,28 +279,28 @@ resource "aws_autoscaling_group" "sentry_asg" {
     create_before_destroy = true
   }
 
-  tags = [
-    {
+  tag {
       key                 = "Name"
       value               = aws_launch_configuration.sentry_launch_config.name
       propagate_at_launch = true
-    },
-    {
+    }
+  tag {
       key                 = "Project"
       value               = "sentry"
       propagate_at_launch = true
-    },
-    {
+    }
+
+  tag {
       key                 = "env"
       value               = var.environment_tag
-      propagate_at_launch = true
-    },
-    {
+      propagate_at_launch = true    
+    }
+
+  tag {
       key                 = "tf-managed"
       value               = "True"
       propagate_at_launch = true
-    },
-  ]
+    }
 }
 
 resource "aws_route53_record" "this" {
