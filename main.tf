@@ -139,17 +139,17 @@ resource "aws_alb_target_group" "tg_sentry" {
 }
 
 
-# data "template_file" "post_launch" {
-#   template = "${file("${path.module}/templates/post_launch.tpl")}"
+data "template_file" "post_launch" {
+  template = "${file("${path.module}/templates/post_launch.tpl")}"
 
-#   vars = {
-#     db_name = "${var.db_name}"
-#     db_user = "${var.db_user}"
-#     db_password = "${var.db_password}"
-#     port = "${aws_rds_cluster.this.port}"
-#     endpoint = "${aws_rds_cluster.this.endpoint}"
-#   }
-# }
+  vars = {
+    db_name = "${var.db_name}"
+    db_user = "${var.db_user}"
+    db_password = "${var.db_password}"
+    port = "${aws_rds_cluster.this.port}"
+    endpoint = "${aws_rds_cluster.this.endpoint}"
+  }
+}
 
 # resource "aws_instance" "sentryserver" {
 #   ami                         = var.ami_id
