@@ -257,21 +257,21 @@ resource "aws_launch_configuration" "sentry_launch_config" {
   key_name             = var.key_name
   # user_data            = data.template_file.post_launch.rendered
   user_data = <<REALEND
-  #cloud-boothook
-  #!/bin/bash
-  sudo -H -i -u theuser -- env bash <<EOF
-  whoami
-  echo ~theuser
-  cd /home/theuser/self-hosted-21.3.0/sentry
-  sudo sed -i 's/"NAME": "postgres"/"NAME": "${var.db_name}"/g' sentry.conf.py
-  sudo sed -i 's/"USER": "postgres"/"USER": "${var.db_user}"/g' sentry.conf.py
-  sudo sed -i 's/"PASSWORD": ""/"PASSWORD": "${var.db_password}"/g' sentry.conf.py
-  sudo sed -i 's/"PORT": ""/"PORT": "${aws_rds_cluster.this.port}"/g' sentry.conf.py
-  sudo sed -i 's/"HOST": "postgres"/"HOST": "${aws_rds_cluster.this.endpoint}"/g' sentry.conf.py
-  cd ..
-  sudo ./install.sh --no-user-prompt
-  cd /home/theuser/self-hosted-21.3.0/ && sudo docker-compose up -d
-  EOF
+#cloud-boothook
+#!/bin/bash
+sudo -H -i -u theuser -- env bash <<EOF
+whoami
+echo ~theuser
+cd /home/theuser/self-hosted-21.3.0/sentry
+sudo sed -i 's/"NAME": "postgres"/"NAME": "${var.db_name}"/g' sentry.conf.py
+sudo sed -i 's/"USER": "postgres"/"USER": "${var.db_user}"/g' sentry.conf.py
+sudo sed -i 's/"PASSWORD": ""/"PASSWORD": "${var.db_password}"/g' sentry.conf.py
+sudo sed -i 's/"PORT": ""/"PORT": "${aws_rds_cluster.this.port}"/g' sentry.conf.py
+sudo sed -i 's/"HOST": "postgres"/"HOST": "${aws_rds_cluster.this.endpoint}"/g' sentry.conf.py
+cd ..
+sudo ./install.sh --no-user-prompt
+cd /home/theuser/self-hosted-21.3.0/ && sudo docker-compose up -d
+EOF
   REALEND
   security_groups             = [aws_security_group.sg_sentry_9000.id]
   associate_public_ip_address = var.is_private ? false : true
