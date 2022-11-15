@@ -157,7 +157,7 @@ resource "aws_instance" "sentryserver" {
   subnet_id                   = var.is_private ?  var.private_subnet_ids[0] : var.public_subnet_ids[0]
   vpc_security_group_ids      = [aws_security_group.sg_sentry_9000.id]
   associate_public_ip_address = var.is_private ? false : true
-  key_name = "sentry-staging"
+  key_name = var.key_name
   tags = {
     Name = "Sentry-Server"
   }
@@ -248,6 +248,59 @@ resource "aws_lb_listener_rule" "host_based_weighted_routing" {
       values = [var.domain]
     }
   }
+}
+
+resource "aws_launch_configuration" "sentry_launch_config" {
+  name_prefix          = "sentry-${var.environment_tag}-${var.region}-"
+  image_id             = var.ami_id
+  instance_type        = var.instance_type
+  key_name             = var.key_name
+  user_data = data.template_file.post_launch.rendered
+  security_groups             = [aws_security_group.sg_sentry.id]
+  associate_public_ip_address = var.is_private ? false : true
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_autoscaling_group" "sentry_asg" {
+  name                 = aws_launch_configuration.sentry_launch_config.name
+  launch_configuration = aws_launch_configuration.sentry_launch_config.name
+  min_size             = var.asg_min_size
+  desired_capacity     = var.asg_desired_capacity
+  max_size             = var.asg_max_size
+  vpc_zone_identifier  = var.subnet_ids
+  health_check_type    = "EC2"
+  termination_policies = ["OldestLaunchConfiguration", "OldestInstance"]
+  target_group_arns    = "${aws_alb_target_group.tg_sentry.arn}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = [
+    {
+      key                 = "Name"
+      value               = aws_launch_configuration.sentry_launch_config.name
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Project"
+      value               = "sentry"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "env"
+      value               = var.environment_tag
+      propagate_at_launch = true
+    },
+    {
+      key                 = "tf-managed"
+      value               = "True"
+      propagate_at_launch = true
+    },
+  ]
 }
 
 resource "aws_route53_record" "this" {

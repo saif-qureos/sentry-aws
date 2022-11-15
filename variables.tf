@@ -1,10 +1,25 @@
+variable "asg_min_size" {
+  desciption ="(Optional) Autoscaling group minimum size"
+  default = 1
+}
+
+variable "asg_desired_capacity" {
+  desciption = "(Optional) Autoscaling group minimum size"
+  default = 1
+}
+
+variable "asg_max_size" {
+  desciption = "(Optional) Autoscaling group max size"
+  default = 1
+}
+
 variable "environment_tag" {
-  description = "Environment tag"
+  description = "Environment tag to tag with Resources"
   default     = "staging"
 }
 
 variable "is_private" {
-  description = "Are the resources private and the connection should be private or not? If you select true make sure you are connected via VPN"
+  description = "(Required) Are the resources private and the connection should be private or not? If you select true make sure you are connected via VPN"
   default = true
   type = bool
 }
@@ -13,8 +28,14 @@ variable "keypath" {
   default = "../packer/the-keys"
 }
 
+
+variable "key_name" {
+  description = "(Required) The key name to attach to ec2 instance for ssh purpose."
+}
+
+
 variable "region" {
-  description = "Deployment Region"
+  description = "(Required) Deployment Region"
   default = "eu-west-1"
 }
 
