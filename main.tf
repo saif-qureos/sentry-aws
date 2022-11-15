@@ -142,7 +142,7 @@ resource "aws_alb_target_group" "tg_sentry" {
 
 
 data "template_file" "post_launch" {
-  template = "${file("templates/post_launch.tpl")}"
+  template = "${file("./templates/post_launch.tpl")}"
 
   vars = {
     db_name = "${var.db_name}"

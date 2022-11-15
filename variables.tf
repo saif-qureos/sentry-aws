@@ -36,7 +36,7 @@ variable "healthcheck_path" {
 }
 
 variable "domain" {
-  description = "(Required) Domain where metabase will be hosted. Example: metabase.mycompany.com"
+  description = "(Required) Domain where sentry will be hosted. Example: sentry.mycompany.com"
 }
 
 variable "zone_id" {
@@ -81,7 +81,7 @@ variable "protection" {
 }
 
 variable "internet_egress" {
-  description = "(Optional) Grant internet access to the Metabase service"
+  description = "(Optional) Grant internet access to the sentry service"
   default     = true
 }
 
@@ -101,7 +101,7 @@ variable "environment" {
 }
 
 variable "java_timezone" {
-  description = "(Optional) https://www.metabase.com/docs/v0.21.1/operations-guide/running-metabase-on-docker.html#setting-the-java-timezone"
+  description = "(Optional) https://www.sentry.com/docs/v0.21.1/operations-guide/running-sentry-on-docker.html#setting-the-java-timezone"
   default     = "US/Pacific"
 }
 
