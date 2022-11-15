@@ -250,13 +250,6 @@ resource "aws_lb_listener_rule" "host_based_weighted_routing" {
   }
 }
 
-provisioner "local-exec" {
-  interpreter = ["bash", "-c"]
-  command = <<EOT
-    sudo sed -i -e 's/\r$//' ${path.module}/templates/post_launch.tpl
-  EOT
-}
-
 resource "aws_launch_configuration" "sentry_launch_config" {
   name_prefix          = "sentry-${var.environment_tag}-${var.region}-"
   image_id             = var.ami_id
