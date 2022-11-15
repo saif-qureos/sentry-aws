@@ -1,15 +1,15 @@
 variable "asg_min_size" {
-  desciption ="(Optional) Autoscaling group minimum size"
+  description ="(Optional) Autoscaling group minimum size"
   default = 1
 }
 
 variable "asg_desired_capacity" {
-  desciption = "(Optional) Autoscaling group minimum size"
+  description = "(Optional) Autoscaling group minimum size"
   default = 1
 }
 
 variable "asg_max_size" {
-  desciption = "(Optional) Autoscaling group max size"
+  description = "(Optional) Autoscaling group max size"
   default = 1
 }
 
