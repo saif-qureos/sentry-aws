@@ -109,9 +109,7 @@ resource "aws_security_group" "sg_sentry_9000" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-depends_on = [
-  module.yaml_json_multidecoder
-]
+
 }
 
 
@@ -142,7 +140,7 @@ resource "aws_alb_target_group" "tg_sentry" {
 
 
 data "template_file" "post_launch" {
-  template = "${file("./templates/post_launch.tpl")}"
+  template = "${file("${path.module}/templates/post_launch.tpl")}"
 
   vars = {
     db_name = "${var.db_name}"
