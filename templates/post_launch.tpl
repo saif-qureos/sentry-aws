@@ -29,5 +29,5 @@ sudo sed -i 's/"PORT": ""/"PORT": "${port}"/g' sentry.conf.py
 sudo sed -i 's/"HOST": "postgres"/"HOST": "${endpoint}"/g' sentry.conf.py
 cd ..
 sudo ./install.sh --no-user-prompt
-cd /home/theuser/self-hosted-21.3.0/ && sudo docker-compose up -d
 EOF
+cd /home/theuser/self-hosted-21.3.0/ && sudo docker-compose up -d
