@@ -114,14 +114,14 @@ resource "aws_security_group" "sg_sentry_9000" {
 
 
 
-resource "aws_alb_target_group_attachment" "sentryserver_phys_exter" {
-  target_group_arn = aws_alb_target_group.tg_sentry.arn
-  target_id        = aws_instance.sentryserver.id  
-  port             = 9000
-  depends_on = [
-    aws_instance.sentryserver
-  ]
-}
+# resource "aws_alb_target_group_attachment" "sentryserver_phys_exter" {
+#   target_group_arn = aws_alb_target_group.tg_sentry.arn
+#   target_id        = aws_instance.sentryserver.id  
+#   port             = 9000
+#   depends_on = [
+#     aws_instance.sentryserver
+#   ]
+# }
 
 resource "aws_alb_target_group" "tg_sentry" {  
   name     = "tg-sentry"  
@@ -151,41 +151,41 @@ data "template_file" "post_launch" {
   }
 }
 
-resource "aws_instance" "sentryserver" {
-  ami                         = var.ami_id
-  instance_type               = var.instance_type
-  subnet_id                   = var.is_private ?  var.private_subnet_ids[0] : var.public_subnet_ids[0]
-  vpc_security_group_ids      = [aws_security_group.sg_sentry_9000.id]
-  associate_public_ip_address = var.is_private ? false : true
-  key_name = var.key_name
-  tags = {
-    Name = "Sentry-Server"
-  }
+# resource "aws_instance" "sentryserver" {
+#   ami                         = var.ami_id
+#   instance_type               = var.instance_type
+#   subnet_id                   = var.is_private ?  var.private_subnet_ids[0] : var.public_subnet_ids[0]
+#   vpc_security_group_ids      = [aws_security_group.sg_sentry_9000.id]
+#   associate_public_ip_address = var.is_private ? false : true
+#   key_name = var.key_name
+#   tags = {
+#     Name = "Sentry-Server"
+#   }
 
-  provisioner "file" {
-    content      = data.template_file.post_launch.rendered
-    destination = "/tmp/startup.sh"
-  }
+#   provisioner "file" {
+#     content      = data.template_file.post_launch.rendered
+#     destination = "/tmp/startup.sh"
+#   }
 
-  provisioner "remote-exec" {
-    inline = [
-        "sudo sed -i -e 's/\r$//' /tmp/startup.sh",
-        "sudo chmod +x /tmp/startup.sh",
-        "sudo /tmp/startup.sh",
-        "cd /home/theuser/self-hosted-21.3.0/ && sudo docker-compose up -d"
-    ]
-  }
-  connection {
-    type        = "ssh"
-    user        = "theuser"
-    private_key = file(var.keypath)
-    host        = var.is_private ? self.private_ip : self.public_ip
-  }
+#   provisioner "remote-exec" {
+#     inline = [
+#         "sudo sed -i -e 's/\r$//' /tmp/startup.sh",
+#         "sudo chmod +x /tmp/startup.sh",
+#         "sudo /tmp/startup.sh",
+#         "cd /home/theuser/self-hosted-21.3.0/ && sudo docker-compose up -d"
+#     ]
+#   }
+#   connection {
+#     type        = "ssh"
+#     user        = "theuser"
+#     private_key = file(var.keypath)
+#     host        = var.is_private ? self.private_ip : self.public_ip
+#   }
 
-  depends_on = [
-    aws_rds_cluster_instance.this
-  ]
-}
+#   depends_on = [
+#     aws_rds_cluster_instance.this
+#   ]
+# }
 
 resource "aws_alb" "alb_sentry" {  
   name            = "lb-sentry"
