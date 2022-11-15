@@ -251,46 +251,11 @@ resource "aws_lb_listener_rule" "host_based_weighted_routing" {
 }
 
 resource "aws_launch_configuration" "sentry_launch_config" {
-  name_prefix          = "sentry-${var.environment_tag}-${var.region}-"
-  image_id             = var.ami_id
-  instance_type        = var.instance_type
-  key_name             = var.key_name
-  # user_data            = data.template_file.post_launch.rendered
-  user_data = <<REALEND
-Content-Type: multipart/mixed; boundary="//"
-MIME-Version: 1.0
-
---//
-Content-Type: text/cloud-config; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename="cloud-config.txt"
-
-#cloud-config
-cloud_final_modules:
-- [scripts-user, always]
-
---//
-Content-Type: text/x-shellscript; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename="userdata.txt"
-
-#!/bin/bash
-sudo -H -i -u theuser -- env bash <<EOF
-whoami
-echo ~theuser
-cd /home/theuser/self-hosted-21.3.0/sentry
-sudo sed -i 's/"NAME": "postgres"/"NAME": "${var.db_name}"/g' sentry.conf.py
-sudo sed -i 's/"USER": "postgres"/"USER": "${var.db_user}"/g' sentry.conf.py
-sudo sed -i 's/"PASSWORD": ""/"PASSWORD": "${var.db_password}"/g' sentry.conf.py
-sudo sed -i 's/"PORT": ""/"PORT": "${aws_rds_cluster.this.port}"/g' sentry.conf.py
-sudo sed -i 's/"HOST": "postgres"/"HOST": "${aws_rds_cluster.this.endpoint}"/g' sentry.conf.py
-cd ..
-sudo ./install.sh --no-user-prompt
-cd /home/theuser/self-hosted-21.3.0/ && sudo docker-compose up -d
-EOF
-  REALEND
+  name_prefix                 = "sentry-${var.environment_tag}-${var.region}-"
+  image_id                    = var.ami_id
+  instance_type               = var.instance_type
+  key_name                    = var.key_name
+  user_data                   = replace(data.template_file.post_launch.rendered,"/\\r/","")
   security_groups             = [aws_security_group.sg_sentry_9000.id]
   associate_public_ip_address = var.is_private ? false : true
 
