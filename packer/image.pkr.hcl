@@ -5,7 +5,7 @@ variable "region" {
 
 variable "aws_profile" {
   type    = string
-  default = "qureos-stg-terraform"
+  default = "qureos-prod-terraform"
 }
 
 packer {
@@ -17,7 +17,7 @@ packer {
   }
 }
 
-locals { ami_suffix = "qureos-stg" }
+locals { ami_suffix = "qureos-prod" }
 
 source "amazon-ebs" "sentry" {
   ami_name      = "sentry-${local.ami_suffix}"
