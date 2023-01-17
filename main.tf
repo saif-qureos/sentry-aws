@@ -132,8 +132,8 @@ resource "aws_alb_target_group" "tg_sentry" {
   health_check {    
     healthy_threshold   = 10    
     unhealthy_threshold = 10
-    interval            = 60
-    timeout             = 61  
+    interval            = 61
+    timeout             = 60  
     path                = var.healthcheck_path   
     port                = "9000"  
   }
